@@ -24,7 +24,12 @@ function getLanIps() {
   return ips;
 }
 const DB_PATH = path.join(__dirname, 'writings.db');
-const HTML_PATH = path.join(__dirname, '30天写作挑战.html');
+// 自动匹配 HTML 文件（兼容不同系统和文件名）
+const HTML_PATH = (() => {
+  const files = fs.readdirSync(__dirname).filter(f => f.endsWith('.html'));
+  if (files.length > 0) return path.join(__dirname, files[0]);
+  return path.join(__dirname, 'index.html'); // fallback
+})();
 
 // ========== 数据库 ==========
 let db;
@@ -103,9 +108,9 @@ app.use((req, res, next) => {
 // ========== 静态文件 ==========
 app.get('/', (req, res) => {
   if (!fs.existsSync(HTML_PATH)) {
-    return res.status(404).send('HTML 文件未找到，请将 30天写作挑战.html 放在同目录下');
+    return res.status(404).type('text/html').send('<h2>HTML 文件未找到</h2><p>请确认 index.html 与 server.js 在同一目录</p>');
   }
-  res.sendFile(HTML_PATH);
+  res.type('text/html; charset=utf-8').sendFile(HTML_PATH);
 });
 
 // 健康检查（云部署用）
@@ -211,9 +216,20 @@ app.use((req, res) => {
 
 // ========== 启动 ==========
 async function start() {
-  const SQL = await initSqlJs();
-  global.SQL = SQL;
-  initDb();
+  console.log('启动中...');
+  console.log('HTML 路径:', HTML_PATH);
+  console.log('数据库路径:', DB_PATH);
+  try {
+    const SQL = await initSqlJs();
+    global.SQL = SQL;
+    console.log('SQLite 初始化成功');
+    initDb();
+    console.log('数据库就绪');
+  } catch (err) {
+    console.error('初始化失败:', err.message);
+    console.error(err.stack);
+    process.exit(1);
+  }
 
   const server = app.listen(PORT, '0.0.0.0', () => {
     const lanIps = getLanIps();
