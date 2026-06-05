@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30天文笔调整</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf8f5;--bg-card:#fffdf9;--bg-warm:#fef9ef;--text:#3d3427;
+  --text-light:#8c7b6b;--text-muted:#b8a99a;--accent:#c4743a;
+  --accent-light:#e8a87c;--accent-bg:#fef5ee;--border:#e8ddd0;
+  --border-light:#f0e8db;--shadow:0 2px 16px rgba(60,40,20,0.06);
+  --shadow-lg:0 8px 40px rgba(60,40,20,0.10);--radius:12px;--radius-sm:8px;
+  --font-serif:"Noto Serif SC","Source Han Serif SC","STSong",serif;
+  --font-sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --transition:0.25s cubic-bezier(0.4,0,0.2,1);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#1e1b18;--bg-card:#252220;--bg-warm:#2a2520;--text:#e0d6c8;
+    --text-light:#b0a395;--text-muted:#706558;--accent:#e8945a;
+    --accent-light:#c4743a;--accent-bg:#2f2820;--border:#3d3427;
+    --border-light:#332d25;--shadow:0 2px 16px rgba(0,0,0,0.2);
+    --shadow-lg:0 8px 40px rgba(0,0,0,0.3);
+  }
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
+
+.header{
+  background:var(--bg-card);border-bottom:1px solid var(--border);
+  padding:16px 24px;position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(12px);box-shadow:0 1px 8px rgba(0,0,0,0.04);
+}
+.header-inner{
+  max-width:1100px;margin:0 auto;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.logo{font-family:var(--font-serif);font-size:1.35rem;font-weight:700;color:var(--accent);letter-spacing:0.04em;white-space:nowrap}
+.logo-sub{font-size:0.7rem;color:var(--text-muted);font-weight:400;letter-spacing:0.08em;display:block}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav-btn{
+  padding:8px 18px;border-radius:20px;border:1px solid var(--border);
+  background:transparent;color:var(--text-light);font-size:0.88rem;
+  cursor:pointer;transition:var(--transition);font-family:var(--font-sans);white-space:nowrap;
+}
+.nav-btn:hover{border-color:var(--accent-light);color:var(--accent);background:var(--accent-bg)}
+.nav-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.main{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+
+.stats-bar{
+  display:flex;gap:20px;flex-wrap:wrap;margin-bottom:28px;
+  padding:16px 20px;background:var(--bg-card);border-radius:var(--radius);
+  border:1px solid var(--border);box-shadow:var(--shadow);
+}
+.stat-item{display:flex;align-items:center;gap:8px}
+.stat-num{font-size:1.5rem;font-weight:700;color:var(--accent);font-family:var(--font-serif)}
+.stat-label{font-size:0.82rem;color:var(--text-light)}
+
+.section-title{
+  font-family:var(--font-serif);font-size:1.3rem;font-weight:700;
+  margin-bottom:18px;color:var(--text);display:flex;align-items:center;gap:10px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.toc-grid{display:flex;flex-direction:column;gap:10px}
+.toc-item{
+  background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:var(--shadow);padding:16px 20px;cursor:pointer;
+  transition:var(--transition);display:flex;align-items:center;gap:12px;
+}
+.toc-item:hover{box-shadow:var(--shadow-lg);border-color:var(--accent-light)}
+.toc-num{
+  width:40px;height:40px;border-radius:50%;background:var(--accent-bg);
+  color:var(--accent);display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-serif);font-size:1rem;font-weight:700;flex-shrink:0;
+}
+.toc-info{flex:1;min-width:0}
+.toc-theme{font-family:var(--font-serif);font-size:1rem;font-weight:600;color:var(--text)}
+.toc-meta{font-size:0.76rem;color:var(--text-muted);margin-top:2px}
+.toc-arrow{color:var(--text-muted);font-size:1rem;flex-shrink:0;transition:transform 0.3s}
+
+.detail-header{margin-bottom:20px}
+.writing-card{
+  background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:var(--shadow);padding:20px 22px;margin-bottom:14px;
+}
+.writing-author-line{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.88rem;font-weight:600;color:var(--accent);margin-bottom:4px;
+}
+.writing-title-line{font-size:0.82rem;color:var(--text-muted);font-style:italic}
+.writing-body{margin-top:10px;font-family:var(--font-serif);font-size:0.95rem;line-height:1.9;white-space:pre-line;color:var(--text)}
+
+.author-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.author-card{
+  background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:var(--shadow);padding:22px;cursor:pointer;transition:var(--transition);
+}
+.author-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--accent-light)}
+.author-avatar{
+  width:50px;height:50px;border-radius:50%;background:var(--accent-bg);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-serif);font-size:1.3rem;font-weight:700;margin-bottom:12px;
+}
+.author-name{font-family:var(--font-serif);font-size:1.15rem;font-weight:700;color:var(--text)}
+.author-stats{font-size:0.8rem;color:var(--text-muted);margin-top:4px}
+.author-themes{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px}
+.author-theme-tag{padding:3px 10px;border-radius:12px;background:var(--accent-bg);color:var(--accent);font-size:0.72rem;font-weight:500}
+
+.theme-list{display:flex;flex-direction:column;gap:10px}
+.theme-list-item{
+  background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:var(--shadow);padding:16px 20px;cursor:pointer;
+  transition:var(--transition);display:flex;align-items:center;justify-content:space-between;
+}
+.theme-list-item:hover{border-color:var(--accent-light);box-shadow:var(--shadow-lg)}
+.theme-list-day{font-weight:700;color:var(--accent);font-size:0.95rem;white-space:nowrap}
+.theme-list-theme{flex:1;margin:0 14px;font-family:var(--font-serif);font-size:0.95rem;color:var(--text)}
+.theme-list-arrow{color:var(--text-muted);flex-shrink:0}
+
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;
+  border:1px solid var(--border);background:transparent;color:var(--text-light);
+  cursor:pointer;font-size:0.88rem;font-family:var(--font-sans);margin-bottom:18px;
+  transition:var(--transition);
+}
+.back-btn:hover{border-color:var(--accent-light);color:var(--accent)}
+
+.breadcrumb{font-size:0.82rem;color:var(--text-muted);margin-bottom:12px}
+.breadcrumb span{color:var(--accent);cursor:pointer}
+.breadcrumb span:hover{text-decoration:underline}
+
+.today-highlight{
+  background:linear-gradient(135deg,var(--accent-bg) 0%,var(--bg-card) 100%);
+  border:1px solid var(--accent-light);border-radius:var(--radius);
+  padding:22px 24px;margin-bottom:24px;cursor:pointer;transition:var(--transition);
+}
+.today-highlight:hover{box-shadow:var(--shadow-lg)}
+.today-badge{
+  display:inline-block;padding:4px 14px;border-radius:12px;
+  background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;margin-bottom:10px;
+}
+.today-theme{font-family:var(--font-serif);font-size:1.15rem;font-weight:700}
+.today-hint{font-size:0.78rem;color:var(--text-muted);margin-top:8px}
+
+.write-panel{
+  background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:var(--shadow);padding:28px;
+}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.form-input,.form-select,.form-textarea{
+  width:100%;padding:10px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg);color:var(--text);
+  font-size:0.92rem;font-family:var(--font-sans);transition:border-color 0.2s;resize:vertical;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(196,116,58,0.1);
+}
+.form-textarea{min-height:160px;font-family:var(--font-serif);line-height:1.8}
+.form-select{cursor:pointer}
+.new-day-box{
+  background:var(--bg-warm);border:1px dashed var(--accent-light);
+  border-radius:var(--radius-sm);padding:16px;margin-top:12px;
+}
+.btn{
+  padding:10px 24px;border-radius:20px;border:none;font-size:0.9rem;
+  font-weight:600;cursor:pointer;transition:var(--transition);font-family:var(--font-sans);
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-light)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-light)}
+.btn-outline:hover{border-color:var(--accent-light);color:var(--accent)}
+.btn-danger{background:transparent;border:1px solid #e88;color:#c55;font-size:0.78rem;padding:4px 12px}
+.btn-danger:hover{background:#fef0f0}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+
+.user-writings{margin-top:28px}
+.user-writing-item{
+  padding:14px 0;border-bottom:1px solid var(--border-light);
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+}
+.user-writing-info{flex:1}
+.user-writing-meta{font-size:0.78rem;color:var(--text-muted)}
+.user-writing-preview{font-size:0.88rem;color:var(--text);margin-top:4px}
+
+/* ===== Toast 悬浮通知 ===== */
+.toast-container{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:90vw;
+}
+.toast-item{
+  padding:12px 22px;border-radius:24px;font-size:0.88rem;font-weight:500;
+  color:#fff;text-align:center;pointer-events:auto;
+  animation:toastIn 0.35s cubic-bezier(0.21,1.02,0.46,1.16),toastOut 0.3s ease-in forwards;
+  animation-delay:0s,2s;box-shadow:0 4px 20px rgba(0,0,0,0.18);
+  white-space:nowrap;
+}
+.toast-success{background:#4a9c5d}
+.toast-error{background:#c0392b}
+.toast-info{background:#3d3427}
+@keyframes toastIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-12px)}}
+
+/* ===== 密码遮罩 ===== */
+.pwd-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn 0.25s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.pwd-dialog{
+  background:var(--bg-card);border-radius:16px;padding:32px 28px 24px;
+  width:90%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,0.25);
+  text-align:center;animation:slideUp 0.3s cubic-bezier(0.21,1.02,0.46,1.16);
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.pwd-icon{font-size:2.4rem;margin-bottom:8px}
+.pwd-title{font-family:var(--font-serif);font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.pwd-hint{font-size:0.82rem;color:var(--text-muted);margin-bottom:20px}
+.pwd-input{
+  width:100%;padding:12px 16px;border-radius:24px;border:1px solid var(--border);
+  background:var(--bg);color:var(--text);font-size:1rem;text-align:center;
+  font-family:var(--font-sans);letter-spacing:0.1em;transition:border-color 0.2s;
+}
+.pwd-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(196,116,58,0.12)}
+.pwd-shake{animation:shake 0.5s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.pwd-btns{display:flex;gap:10px;margin-top:18px}
+.pwd-btns .btn{flex:1}
+
+/* ===== 确认弹窗 ===== */
+.confirm-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1001;
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn 0.2s ease;
+}
+.confirm-dialog{
+  background:var(--bg-card);border-radius:16px;padding:28px 24px 20px;
+  width:90%;max-width:340px;box-shadow:0 20px 60px rgba(0,0,0,0.25);
+  text-align:center;animation:slideUp 0.25s cubic-bezier(0.21,1.02,0.46,1.16);
+}
+.confirm-msg{font-size:0.95rem;color:var(--text);line-height:1.6;margin-bottom:20px}
+.confirm-btns{display:flex;gap:10px}
+.confirm-btns .btn{flex:1}
+
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-muted);font-family:var(--font-serif);font-size:1rem}
+
+@media (max-width:640px){
+  .header-inner{flex-direction:column;gap:10px}
+  .nav{justify-content:center;gap:4px}
+  .nav-btn{padding:8px 14px;font-size:0.82rem}
+  .author-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .stats-bar{gap:10px;padding:12px 14px}
+  .toc-item{padding:12px 14px}
+  .writing-card{padding:14px 16px}
+  .main{padding:16px 12px 40px}
+  .write-panel{padding:18px 14px}
+  .form-input,.form-select,.form-textarea{font-size:16px;padding:10px 12px}
+  .toast-item{font-size:0.8rem;padding:10px 18px}
+  .pwd-dialog{padding:24px 20px 20px}
+  .btn{padding:10px 18px;font-size:0.85rem}
+  .section-title{font-size:1.1rem}
+  .today-theme{font-size:1rem}
+  .toc-num{width:34px;height:34px;font-size:0.85rem}
+  .author-card{padding:16px}
+  .author-avatar{width:40px;height:40px;font-size:1.1rem}
+  .user-writing-item{flex-direction:column;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <span class="logo">30天文笔调整</span>
+      <span class="logo-sub">WRITING CHALLENGE</span>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="home">每日主题</button>
+      <button class="nav-btn" data-view="authors">作者花园</button>
+      <button class="nav-btn" data-view="write">码字</button>
+    </nav>
+  </div>
+</div>
+
+<div class="main" id="main"></div>
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+var DATA_DAYS = [{"day":1,"themeGiver":"子原","theme":"写一个没有名字的主角，全程只用代词和身份称呼。","writings":[{"author":"橙子","title":"窗","content":"她站在浴室的镜子前，水雾覆满的镜子使她看不清自己的轮廓，花洒没关紧，也无碍，滴下的的水珠如同古老的倒计时，至少还有东西在数秒，提醒她还活着。她用指腹划过镜面上的雾，镜子的泪痕被她擦去，散开的时候，她看见了自己的脸，陌生，苍白，眼眶微红，嘴角却带着一丝弧度，她盯着那双眼睛看了很久。“原来你在这里...I’ve been looking everywhere. I finally found you.”（我找遍了一切，我终于找到你了）"},{"author":"小岛","title":"杆","content":"1.很多时候她觉得自己只是一个负责“承上启下”的杆，所以她茫然，因为乘和启似乎只是上和下的附属品，或者说是一个让外部更好地看见他们的通道。她渐渐意识不到自己的存在，也常常诘问自己：杆有没有自己的价值？\n\n2.我是一个杆，但多数时间我选择不乘上，也不启下，我喜欢躺在草地上晒太阳，也常常和我的物理学家朋友一起玩耍，最近他告诉我，因为我的帮助，他发现了一个令他惊喜的东西：杠杆原理。\n\n3.杆（淦）！"},{"author":"HBC","title":"无题","content":"园丁啊\n你看那窗外狂放不羁的花朵\n你为何将这天性散漫的生命\n禁锢在方寸土地之中\n\n神明啊\n你看那对面伤痕累累的造物\n你为何武动以爱为名的长剑\n挥砍在斑驳印记之上"},{"author":"Bright","title":"蓝","content":"这座城市夜间的灯光是昏黄的，在路灯下，所有的影子会变成蓝色。这是一种只存在在余光里的、几乎浓稠的蓝色，对于一个16岁的女孩来说，这是令人欣喜的新发现。马路上行驶的车带起风，站在摇曳的树影里她突然想着，离开家乡之后蓝色成了她最喜欢的颜色。她尤其迷恋这样的场景，傍晚太阳下山之后，如果天气晴朗，天空会带来蓝色的氛围，像是在整座城市上方叠加了一片透明度10%的海洋。"},{"author":"科学怪熊","title":"无题","content":"“帮我挡着点儿老师。”她骄傲地命令道，然后把双手在课桌上一叠，让宽松的校服袖子堆成蓬松的枕头，把额头埋了进去。\n\n“遵命。”我一边答应着，一边把我俩的课本和字典聚到一起，堆成一个半米高的堡垒，然后从桌壳里摸出张英语报纸，来篇轻松的完形填空。\n\n“哼，哪里有老师来嘛。”我一边对答案，一边听到其他同学陆续走进教室。五月份，北侧教室的中午，光线充足又清凉，偶尔凳子在地板上拖动的声音。\n\n二十个全对。书垒被我建造得很巧妙，既可以防御来自讲台的威胁，又可以隐蔽我右手的小动作。她散开的头发随着呼吸一起一伏，像是一只神秘的黑色大水母。她的笔袋吸引我很久了，我总是想拆了它然后反着装回去，这可是个好机会。\n\n不知道为什么，我顺手在自己耳朵边上绕了半圈，做了一个她拨头发的动作。这可真蠢。"},{"author":"子原","title":"无题","content":"经过了一上午的哀嚎，它终于被放了出来，我站在原地看着它，它便过来闻我的脚。我动了一下，一颗白色洲际导弹立马发射向沙发底，伴随着巨响。我懒得理它，摊在沙发上。过了一会儿，它原地起跳蹦上沙发扶手，又开始闻我的手。我不敢动了，生怕再把它吓走。它闻够了后，张开嘴开始咬我。下狠劲的那种。我下次再尊重它我就是狗。\n\n汪汪汪"}]},{"day":2,"themeGiver":"小岛","theme":"把“踢倒了路边的啤酒罐。”写进你今天的文字。","writings":[{"author":"小岛","title":"无题","content":"Z自诩是一个对他人而言不算麻烦的人。一般地工作，一般地交友，一般地生活，他尽力让自己不去对别人有什么需求，也在人群中隐形自己，让麻烦不要向他走来。\n\nZ的猫是他生活中的唯一变数。猫叫捡捡，拥有一双很漂亮的眼睛。捡捡喜欢在经过他的时候用尾巴缠绕他的腿，然后又跳上摆满绿植的窗台，望向对面的高楼。\n\n养一只猫需要什么？Z想过很多次这个问题。足够的钱以买它的粮和零食、足够的耐心以在它打碎碗后再收拾干净，以及必须面对自己需要猫的毛发抚摸自己的真实渴望。\n\n这天，Z像往常一样下班后去到那家常去的便利店，一桶泡面和一杯梅子气泡水便足以满足他的一人时间。解决完这些后，他走出便利店，突然有些想捡捡，刚把左脚迈出去，结果踢倒了路边的啤酒罐。Z站在原地看了一会儿不断溢出的啤酒，他突然觉得好畅快。"},{"author":"橙子","title":"无题","content":"石板路上凝着薄暮的湿气，裙摆拂过墙根时，沾上了颓败的青苔味。那只空啤酒罐半陷在暗角，她没绕开，只是垂着眼，用鞋尖轻轻一拨——金属滚动的声响在空荡荡的巷子里碎开，像谁失手打翻了一整盒细小的哀伤。罐子停了，她也停了。\n\n蹲下身，指腹摩挲着罐身凉薄的铝皮，忽然想：如果自己也像这样被人一脚踢开，大概不会发出这么大的动静——只会安静地瘪下去，瘪成无人认领的沉默。路灯亮起来的时候，她把罐子留在原地，站起来，裙摆上的湿痕慢慢洇开，像一句没写完的、重复了很多遍的话。"},{"author":"HBC","title":"无题","content":"踢倒了路边的啤酒罐，不禁埋头捡起，恍惚中回想过去，曾几何时也是狂妄少年，怎会在意此等小事\n踢倒了路边的啤酒罐，不禁低头望去，迷茫里正视当下，今时今日正如风中残烛，只需等待随风摇摆\n踢倒了路边的啤酒罐，不禁仰头长笑，虚妄着展望未来，未来变数恰似无定风波，我当把风一飞冲天\n\n一只蜉蝣怎可撼树，一块朽木怎能雕琢，不过浮梁一梦而已。"},{"author":"Bright","title":"无题","content":"今天是工作日\n斯维特拉娜推开家门\n风快要把太阳吹落\n这座城市已经被风和某些刺鼻的气味俘虏\n今天她的邻居，又在说着胡话\n她和他互不相识，即使她已经搬到这儿一年\n\n斯维特拉娜走向有轨电车的车站，穿过小巷\n她踢倒了路边的啤酒罐\n雪的颜色变得更深"},{"author":"科学怪熊","title":"无题","content":"这破自行车，链条居然被我踩断了。\n\n我的破车上下颠倒，躺在修车大爷脏兮兮的红色毯子上。“叮”，大爷的锤子敲在链节上，砸出一根银色的金属芯。\n\n明天就是寒假了，我开始盘算回家以后怎么打电话约她到书店去。我的视线越过修车大爷配钥匙的摊位，聚焦在那个穿着军大衣的男人身上。\n\n今天的太阳很好，他鸟窝似的头发也比平时更整齐了一点。他用几根树枝搭了个架子，架着那个漆黑的铁皮罐子，用一堆枯枝煮着什么东西。他的军大衣拖到地上，看不见他今天穿了什么裤子——或者有没有穿裤子。我猜他应该是蹲在那里。油黑色的棉花袖口伸出一只更黑的手，手里握着一个绿色的易拉罐。\n\n“啪！”不知哪里飞来一块砖头，落在男人柴火的边上。我和他同时抬眼望去，几个小学生讥笑着丢出另一块砖头。\n\n“砰！”砖头精准地落到了铁皮罐子里。罐子翻了，里面的菜叶和豆腐撒在地上。那个神射手跳起来欢呼。男人也跳起来，我看到了他的光腿，比他的手干净一点。\n\n男人吼着什么，我听不懂，像是野兽的声音。小学生们一边笑一边跑，用稚嫩的声音模仿着成人的脏话。男人舞动着军大衣，向前跑出几步，踢翻了他放在路边的啤酒罐。"}]},{"day":3,"themeGiver":"Bright","theme":"写一种夏天限定的积极情绪","writings":[{"author":"橙子","title":"夏天限定的赦免","content":"你等了一整个下午。\n\n空气闷得像拧不干的毛巾，黏在皮肤上，连呼吸都变得迟缓。蝉鸣织成一张密不透风的网，把世界罩在里面。你坐在窗前，看着远方的天色一点一点沉下去，不是变暗，是变青——那种墨汁滴进清水里的、缓慢翻涌的青。\n\n然后起风了。\n\n第一滴雨砸在窗台上，炸开一朵小小的深色花。紧接着是第二滴、第十滴、第一百滴。整个夏天的燥热仿佛被一只无形的手猛地掀翻，雷声从天边滚过来，像谁在推着一面巨大的鼓。\n\n推开纱窗，伸出手去。\n\n雨丝凉凉的，落在滚烫的皮肤上，像薄荷炸开。空气里忽然涌进泥土的腥气、青草的涩味、还有远处不知谁家种的白兰花的甜——所有被太阳烤干的气味，此刻全被雨水泡开了，争先恐后地钻进鼻腔。\n\n就是这一刻。\n\n暴雨通常不会很久，夏天傍晚的雨更是急脾气。二十分钟后，雨停了，云层裂开一道缝，漏出金红色的光。你站在湿漉漉的阳台上，赤脚踩着还带着余温的水痕，风吹过来，凉飕飕的，吹起你贴在额前的碎发。\n\n你长长地呼出一口气，像把胸口积压了数日的暑气全吐了出去。\n\n这不是春天那种温柔的解放，也不是秋天那种沉稳的收获。这是夏天独有的、暴烈之后的赦免——它先把你逼到极限，然后在最后一刻松开手，让你跌进一片清凉里。你知道这场凉意留不久，明天太阳还会照常毒辣，但此刻你只想站在这阵风里，闭上眼睛，认真地说一声：够了，这就够了。\n\n就这一阵雨，这一阵风，这个夏天便不算辜负。"},{"author":"HBC","title":"无题","content":"烈阳高照，空气也开始扭曲变形地抗议。我在公园里漫步，想着还没完成的项目，不禁一阵烦躁涌上心头。突然一阵清香钻入脑中，一位妙龄少女正待在公园里小池旁。我看着她静静地坐在池边，带着过时的草帽，长发在旭风下微微飘动，小脚和她被水波揉碎的脸庞溶解在池中，随波而动。她许是厌倦了家中的喧嚣，来此幽静地带静坐。自然也有看不惯她的事物，温度，扭曲的空气，池中的水波还有时不时吹过的风都不停想把她带动。可是身外之物岂能动摇沉静的内心？我学着她的摸样，坐在长椅上，感受着夏天所带来的躁动的世界，感受着我的身体随之轻轻摇摆，感受着心灵渐渐与大自然融为一体......不知不觉中，时间飞逝，好快啊，只感觉是一瞬间。我起身拍了拍在破旧的长椅上磨脏的裤子，继续赶我的路。她还在坐在池边，好像她就属于那个公园，那个小池，那个位置一样。临走前我带走了她的一缕芳香。"},{"author":"小岛","title":"无题","content":"我和妻在夏天时总是更亲密些，这个季节莫名给了我们更多散步的勇气，即使它似乎明明伴随的是更炎热和更多的蚊虫，但我们都偏爱在夏天的傍晚散步。\n\n我们在江边走，看人笑，听鸟叫。我问妻，最近在研究什么？她轻松笑笑，说，想去到一个麻雀看见人不会飞走的地方。\n\n我想我明白她的意思。\n\n于是我和她一起离开了。\n\n和妻并不是第一次因为一句可能在他人眼里听起来奇怪的话就离开长待的房屋，但当然，这一次我们也很兴奋，我们搬去了奥克兰。\n\n等我们到达的时候，那边也来到了夏天。\n\n妻问我，你会一直做那个陪我散步的人吗？我笑了笑，指了指天地，说，别明知故问啦。"},{"author":"子原","title":"无题","content":"我坐在躺椅上，和我的表弟下五子棋。前面的山坡上又有动物来吃草，我们已经总结了规律：上午是马，下午是牛。这些动物似乎并不觉得在山坡上吃草很累，如果是我，我绝对会在最低的山坡上吃草——我都来吃饭了，为什么还要消耗额外的卡路里？我没有问过表弟这个问题，因为我们俩每天都在专注打游戏或者下五子棋，或者我离开去给别人工作拉磨，没有时间想别的。但我觉得他只会比我更懒。我问了问，果然如此。还是在这里下五子棋更适合我们。\n\n在山里度过夏天是个很好的选择，如果没有虫子就更好了。但总而言之，没有什么比在夏天还可以穿长袖厚衣服更让人惬意的了。一想到朋友都在因为高温而鬼哭狼嚎，我就不禁幸灾乐祸起来，代价是我因为溜号输掉了这盘棋。"},{"author":"科学怪熊","title":"无题","content":"手机在震动。两点十分。\n\n我拉开睡袋的拉链，摸了摸耳朵上的肿包。\n\n长城的夜晚还挺冷的。烽火台的不规则裂缝间，闪现着萤火虫的绿点。\n\n对面墙角还是一片漆黑。我打开手机闪光，在灰白的墙砖转角，投下了睡袋的黑影。\n\n“嗯……几点了？”\n“两点多了。喝水不？”\n“喝。我有点冷。”\n“肚子还疼吗？”\n“还好。昨天第一天比较严重，现在好多了。”\n“垫着这个。”\n“谢谢。啊，星空真漂亮。”\n“你听过那个笑话吗，福尔摩斯和华生去露营，结果……”\n“我知道，他们的帐篷被偷走了。哈哈。”\n\n她看着星空，我看着她一动不动的睫毛。\n\n“英仙座在我们头顶吧？”\n“嗯嗯。你看到了吗？”\n“我在看银河。第一次看到这么亮的银河。”\n“哇！”\n“哇。”\n“你会许愿么？”\n“嘿嘿，我早就许好啦。”"},{"author":"Bright","title":"飞蚁","content":"飞蚁来了。一种体长大约1厘米的小虫，琥珀色的翅膀像披风一样拖在身后，被碾死之后的血是棕色的。如果我们能提前阅读天气预报，一定就能预测今天傍晚蚁群的袭击，可惜现在临近期中考，几乎没有人有权限访问手机。18:40，距离晚自习上课还有20分钟，一小批飞蚁率先从窗户底下的缝隙入侵，来到教室的窗台。18:50，最早回到教室的三人组发出尖锐爆鸣，他们迅速采取行动，从包里掏出透明胶把窗户缝堵上。然而，还是有一部分飞蚁突破到教室核心区域——天花板的灯管旁边。天空越来越暗，直到变成浓稠的黑色，一排亮着灯的教室看起来像个避难所。一切都太迟了。19:02，暴雨落下，湿气随着风通过敞开的门席卷了整个教室。仓皇的学生们从门口涌进教室，求生的飞蚁们顶开胶带，从窗户缝里涌进教室。这是独属于南方地区少年们的奥德赛时刻。"}]},{"day":4,"themeGiver":"橙子","theme":"给褪黑素的分手信","writings":[{"author":"橙子","title":"亲爱的褪黑素","content":"亲爱的褪黑素：\n\n你一定不知道，我写下这封信时，手在发抖。不是因为你不好——恰恰相反，你太好了，好得像个牢笼。\n\n认识你之前，我的夜晚是有骨头的。它们粗粝、不规则，像一块被反复摔碎的瓷片拼成的地面。我赤脚走过，脚底渗出细密的血珠，那才像活着。可自从你来了，你把所有夜晚都熨成了同一件白衬衫，领口折得齐整，纽扣一颗不落。我躺下去，像被塞进一个模具——四肢摆正，呼吸放平，连翻身的角度你都替我算好了。\n\n你知道最残忍的是什么吗？我居然真的睡着了。没有挣扎，没有辗转，甚至连梦都不肯给我一场像样的坍塌。醒来时我躺在被子正中央，手规规矩矩地放在身体两侧，像一具已经学过如何体面告别的人。我摸了摸自己的肋骨，它们安安静静地待在原位，连一根骨折过的痕迹都没有。\n\n可是褪黑素，我需要梦来骨折。我需要梦把自己摔得支离破碎，才能在醒来时一片一片拼回去，拼出一个值得醒来的理由。你给了我完整的八小时，平整得像一面湖，可湖底没有沉船，没有溺水者，连一枚石子投进去都会觉得抱歉。这样的睡眠太干净了，干净到让我害怕——我怕有一天，我连噩梦都做不出来了，而你只是轻轻说：那不是很好吗？\n\n不好。我要我的梦会痛，会断，会在某个关节处发出咔嗒一声脆响，像掰断一根枯枝。那声音告诉我，我还在这里，我还没有被你熨成一张用完即弃的面膜。\n\n所以，分手吧。请不要劝我“再试试”。今晚我会关掉你那层淡蓝色的薄膜，让原始的黑暗重新灌进来。它会粗糙，会硌人，会让我在凌晨突然坐起来，但那是我自己的黑夜，有它自己的气味和棱角。\n\n谢谢你替我保管过的那些安眠。但接下来的每个夜晚，请留给更需要的人。\n\n不用回信。你的存在，已经太安静了。"},{"author":"小白","title":"无题","content":"褪黑素君：见信安～今天三刷，注意到结尾时闪现的时候南枝的装扮，正如一朵木棉花，木棉花有一种特征，先花后叶，叶子看不见花，最多能看到花凋落后枯萎的样子，仿佛主人公叶淑柔没办法见到盛开时的郑南枝～女主淑柔为何姓叶，我想起，其叶蓁蓁，宜其家人，以叶的勤勉开枝散叶，抚养起一大家人～山有木兮木有枝，叶有枝兮叶不知～既然如此，我看到木生义无反顾的冲进火里，我想，也是我义不反顾转身离开的时候～再见了，在这个0521的夜晚。"},{"author":"小岛","title":"无题","content":"褪黑素，顾名思义，褪掉黑色色素。我一直使用着它，所以我是一个纯白人。\n\n如果你问我我的白是怎样展现的，我会回答你：高贵、干净、无邪。\n\n因为一些这样那样的原因，我必须开始放弃褪黑素，于是我开始不那么洁白，黑色的部分开始追上我。\n\n黑色，指低下的，肮脏的，有害的。一开始接触这些物质时，我感到异常恐慌，但渐渐地，我竟生出一丝爽快。\n\n这是一封给褪黑素的分手信，是的，我不再需要你，我接受我黑的部分，我也相信，我的黑，也能容纳我的白。"},{"author":"科学怪熊","title":"无题","content":"她从手提包里拿出两个瓶子。利培酮和丙戊酸。\n\n她现在的睡眠出人意料地稳定，然后稳定地被呕吐和抽搐唤醒。噩梦的消失，是疗效还是副作用？\n\n她的手指敲打着方向盘。无法识别的节奏，车窗外的落叶，缓慢的黄色，晃动的地平线，越来越大的呼吸声。\n\n她深深吸气。还能思考，还好。所有的信都寄出去了。\n\n她拿出另一个瓶子。褪黑素，生产日期，2000年。\n\n上一次吃褪黑素是多久之前？三年前吗？\n\n她摇了摇，瓶子的声音很沉闷。\n\n谢谢你，褪黑素。\n\n她从褪黑素的瓶子里倒出两颗子弹，然后拿出了手枪。"},{"author":"Bright","title":"无题","content":"我想和你分手。\n\n这样能让你点进我的对话框吗。\n\n我在回忆最近的事以及给你打这段字的时候，才意识到，我们之间的关系是多么浅薄。我对你一无所知，你的年龄、故乡、外貌、家庭关系....所有的这些我都不知道，你像一个出生在互联网里的幽灵。我甚至不知道你的名字，只能一如既往地称呼你为褪黑素小姐。\n\n好吧，褪黑素小姐，过去的四天你在哪里呢？自从你2月29号凌晨三点半给我发了条“我去睡觉了”的消息之后就再也没有出现过。你的所有社交媒体都停止活动，这段时间我联系了所有的共友让她们寻找你的踪迹，最后我们在x上找到了一些非常像你的帖子，不，应该说确切就是你吧，我想我不会认错....然而它们是从几百个不同的账号里发出的。\n\n可以回我消息吗，拜托了，告诉我发生了什么。"},{"author":"桃子","title":"无题","content":"我终于还是失去了你\n在今天的最后一分钟\n将你掉在le se桶时\n瓶身发出闷响\n我们这段未曾开始就走向告别的旅程\n是你先放的手"},{"author":"子原","title":"无题","content":"亲爱的褪黑素：\n\n自从我初二那年开始熬夜看小说起，你就对我爱搭不理了。我每天晚上都在黑暗中睁着眼睛，没有灯光的时候仿佛空气都要被黑色凝住了，急需你的帮助。但无论我怎么呼唤你，你都不现身。我到底哪里惹你不开心了？我只是熬了几个无关紧要的夜，偷看了几本无关紧要的小说，那都是多少年前的事了！你知道没有你我有多难过吗，你不在我的脑子就关不掉，思绪像外燃机的浓烟一样往外冒，我会被熏死的！你个自私的家伙！\n\n算了，我现在已经不需要你了。我现在开着灯睡得更好。你就窝在你的黑暗角落里生闷气吧。"}]},{"day":5,"themeGiver":"小白","theme":"今天是袁隆平祭日，写和粮食相关主题","writings":[{"author":"小白","title":"无题","content":"当我在麦子下乘凉的时候，我还是觉得水稻比较好，毕竟水稻下面可以游泳，我还可以骑着我的小白鸭在田里抓虾。我的鸭子用玉米驱动，百公里消耗一公斤，在北方，天空没有太多云朵，还可以再省一省，但是相应地，天空纺织业就没那么发达，所以云锦还是成都的好，云南的色彩斑斓，也是有着别样的魅力。"},{"author":"橙子","title":"米粒的偏食症","content":"今天的米饭煮得有些软。我盯着碗里那粒最圆的米，它饱满得不讲道理，像一颗被填得太满的谎言。筷子戳上去，它滚开了，拒绝被审判。\n\n我忽然咽不下去。这些白白胖胖的颗粒，每一粒都圆得那么无辜，那么理直气壮——好像有人替它们承担过饥饿的罪名，而那人已经死了。\n\n死了一年又一年。米粒不知道。\n\n我把那粒最圆的挑出来，放在拇指与食指之间碾了一下。它碎了，粉末嵌进指纹的沟壑里，像一小块烧焦的皮肤。我把它放回碗底，和其他的埋在一起。\n\n然后我吃完了整碗饭。一粒不剩。那粒碎掉的，我咽得最慢。"},{"author":"科学怪熊","title":"人牧场","content":"“也太热了吧。我不善于白天飞行。”海博茨的翅膀耷拉下来。\n\n“加油，”大耳背对着太阳悬停，“阳光下的运动能让我们夜晚的感官更加敏锐。”\n\n“我们为什么要来这里啊？”\n“哎哎，快回来。你们飞错方向了！”\n\n让这群家伙离开夜晚可太难了。偏偏今天是个大晴天，飞了半天，也没个补给点。现在所有的小鬼都着陆了。也好。大耳飞高了一点。\n\n“朋友们，我看到了一个人牧场！悬赏任务，第一个到那里的，我请一杯人血沙冰！”\n\n“好耶！我们休息五分钟，再出发吧。”\n\n“昨天疯狂星期四，咱们吃的吮指原味人，说不定就是这儿生产的。”海博茨猜测道，“就是不知道人牧场有没有不好的味道。”\n\n“肯定不是，快餐业用的都是自动化养人场的白皮速成人，16年就养成了。牧场的散养人，供应的肯定是高档餐厅。”"},{"author":"子原","title":"玉米颂","content":"哦，玉米！甘甜的玉米，高产的玉米！我的祖辈信赖你，我的父母喜爱你，而我，我简直无时无刻不在爱着你！你金黄的玉米须比世上任何一缕秀发都柔顺，你饱满的颗粒强过世间任何一个婴儿饱满的脸颊——啊，不对，你就是它们！你就是富足与美满的象征！你就是人们幸福的笑容！看，你多坚强，你在哪里都能生长，从我的故乡到威严的首都，从南方的荒漠到北方的冻土！我们需要你，需要你给我们食物，需要你带我们越过那威胁着我们的魔鬼，需要你向我们证明我们从未迷路！\n\n哦，来人了。阿列克谢，我们必须要赶紧在全国推广玉米种植，然后让他们拿玉米赶紧发展畜牧业。我们必须快速前进！为了实现这个目标，我需要再增加几场会议，你帮我安排一下。如果你还有什么建议，记得告诉我。"}]},{"day":6,"themeGiver":"HBC","theme":"雨","writings":[{"author":"橙子","title":"雨落","content":"雨落下来的时候，我正站在窗前数第十七个雨滴。\n\n它们打在玻璃上，每一颗都像一颗来不及闭上的眼睛，顺着透明的轨道慢慢往下滑，滑到一半就停了——卡在某个看不见的凹痕里，进退两难。我用指尖隔着玻璃碰了碰最慢的那一颗，它抖了一下，继续往下淌，像是被我惊扰了某种安眠。\n\n今天这场雨已经下了很久。久到我觉得每一滴都是在重复同一句话，可那句话只说了前半截，后半截被风绞碎了，散在地上变成一摊摊反光的水渍。我打开窗，把手伸出去。几滴雨落在手背上，凉得刚好——不是冰凉，是那种人走之后床单余温散尽时的凉。\n\n雨水沿着手背的纹理蜿蜒，钻进指缝，然后消失。我翻过手掌，让掌心承接更多的雨。它们聚在我的生命线里，汇成一条小小的河流，淹过感情线、智慧线，把所有线都模糊成一张没有字的地图。\n\n把手收回来的时候，掌心里已经没有水了。皮肤记住了那种重量——很轻，轻得像一滴雨在落下去之前，犹豫了很久。\n\n我关上了窗。雨还在下，玻璃上的眼睛越来越多，每一颗都在看我，谁也不肯先合上。"},{"author":"科学怪熊","title":"无题","content":"大同每年的前几场雨都很脏。先是一阵狂风卷着沙子，让人睁不开眼，然后零星落下些泥点子。夏天的雨很烈，水幕像墙一样压过来，几乎能把人当场淹死。到了九月份，还有一场十度的雨等着一个三十度的下午，简直是字面意义的下刀子，把胳膊刺得通红。\n\n高中的时候很怕下雨，篮球场积了水就没法玩了。相比之下，下雪还好一点，全班动员起来，半节课就能清理出一个半场。还记得一次我们强行在雨天打球，那颗灰褐色的篮球竟然露出了本色，原来是一颗白球。小伙子的火力真是壮，大家顶着朝天的头发，腾腾地冒着热气，一节自习之后从头到脚都干了。"},{"author":"Bright","title":"太阳雨","content":"蝉鸣震耳欲聋的下午，阳光让蓝天清澈，空气热得扭曲了远处的景色，世界像是一个巨大的玻璃鱼缸。我走出家门，胡乱把披散的头发扎成一束，发尾新染的浅蓝色在余光里荡了一下，让我觉得自己像一只有着蓝色尾巴的观赏鱼。左脚迈出树荫的时候，有什么东西落到我头上，温热湿润的轻微触感。我抬起头，看见有雨滴直直落下来。天空的蓝色饱和度变低了一些，树丛在摇晃中变得青翠，深灰的水泥路面一点、一点暗下去.....所有淋到雨的物体发生轻微的颜色改变。大约两分钟后雨就停了，世界因水雾而闪烁着金光。这是一场漂亮的、点到即止的太阳雨，感谢老天。"}]},{"day":7,"themeGiver":"科学怪熊","theme":"开门遇到一只熊","writings":[{"author":"科学怪熊","title":"冰箱里的熊","content":"小布打开冰箱，看到一只小熊。\n\n关上冰箱门，她冷静地拿出手机。5月26日，22点14分，成都，多云。所以她选择继续完成拿西瓜的任务。\n\n小熊还在那儿。西瓜不见了——和几个层板一起。小熊蜷作一团，刚好把冷藏区塞满。\n\n这时要做的第一件事当然是拍照。\n\n第二件事更重要——关上冰箱门。\n\n小布放大手机录像。小熊的鼻子是黑的，毛是棕色的，肚子一起一伏。考虑冷藏室的温度是5摄氏度，也许小熊在冬眠？\n\n难道，这冰箱被《爱丽丝漫游仙境》《纳尼亚传奇》灵魂附体？啊哈！小布冲到背包前，取出运动相机。小熊还在那儿呼呼大睡呢。她小心地把相机放在冰箱门的储存格上，然后轻轻按下开机键。熊的起床气可是很大的。\n\n三分钟后打开门。小熊不见了，运动相机也不见了，只剩下几块西瓜皮。还好，物质不灭定律似乎没有被完全打破。"},{"author":"橙子","title":"门外的熊","content":"门把手是凉的。我转开它的时候，听见锁舌“咔嗒”一声——像咬断了一根细骨头。\n\n然后它就站在那儿。\n\n不是很大，大概只比我高一个头，毛色是那种被雨泡过的旧棕色。它没有扑过来，也没有吼叫，只是安静地站着，两只前爪垂在身前，像不知道该怎么放 (ｍ－́ˇ•̀ｍ)。我盯着它的眼睛——很小，很圆，像两颗被煮过头的黑豆，表面蒙着一层雾。\n\n我们就这样对视了大概一个呼吸的长度。\n\n我往后退了半步，它没有动。我又退了半步，它还是没有动。于是我向前走了一步——它反而往后退了半步。熊也会怕人吗？还是它只是怕我手里的伞？\n\n我蹲下来，把伞放在地上。它歪了歪头，那个动作太重了，脖子上的毛晃了好几下才停下来。我忽然觉得它不是一头熊，是一块被缝进皮毛里、忘记充气的旧沙发。\n\n“你要进来吗？”我问。\n\n它转身走了。步子很慢，每一步都像在泥里拔萝卜。走到第三棵梧桐树下的时候，它回头看了我一眼——就那么一眼，然后消失在雨雾里。\n\n我关上门。锁舌又“咔嗒”一声。\n\n低头一看，门垫上留着半个湿漉漉的掌印。我用手掌比了比，比我的大，也比我的圆。\n\n那天的晚饭，我多煮了一碗。放在门口。第二天早上，碗空了，碗底有一小撮啃得乱七八糟的竹叶。\n\n它大概不是来吃我的。它只是迷了路，而我刚好开了门。(ｍ－・_・｀)"}]},{"day":8,"themeGiver":"小白","theme":"游戏 or 考试","writings":[{"author":"Bright","title":"送考","content":"我很久没有考试了，说到这个话题，我唯一剩下的印象就是中考。自从我入学以来，每年中考的前一天都会有“送考仪式”。我们学校依山而建，一路上是绵长的坡道，送考那天，初一初二的所有人按班级列队，坡道左边站两排人，右边站两排人，两边的人面对面，几百双眼睛夹着路。每个班都拉一条横幅，写些无人在看的吉祥话，唯一的用处是把参差不齐的人墙抹得平整一些，初三的学生收拾好东西，背着大包小包拖着书箱从教室往下走，在坡道上经过所有学弟学妹，向校门走出去。站在路边当人墙是个极致无聊的事，于是我总是期待自己能成为这场仪式的主角。\n\n我中考前一天下着雨，勉强不用撑伞，但眼镜的视野被雨打乱了，整段路只感觉在人的拥挤下慢慢前行。涌到校门口，通过校门外的红色的充气拱门，鼓风机的轰鸣声把所有人的声音吸走，我接过某位家长早已准备好的向日葵，透过变形的视野看到被雨打蔫的花瓣。这就是我对这场送考仪式的全部印象。"},{"author":"橙子","title":"空洞骑士","content":"我从深渊里爬上来的时候，还闻得到自己身上那股黑黏土的味道。\n\n那地方没有光。成千上万和我长着同一张脸的壳，堆在黑暗的最深处，一个叠一个，像被掰开又懒得合上的贝类。我们被制造出来的时候就没有名字，只有一个编号，后来连编号都省了——因为太多了，多到那个穿白袍的王懒得数。我们被扔进深渊，像筛面粉，抖一抖，掉下去的都是残次品。\n\n我不知道自己为什么还能站起来。\n\n可能是因为太笨了。笨到不知道什么叫放弃，笨到在黑暗中摸索了那么久，骨头里的虚空都长成了脊椎的形状。\n\n后来我爬出那个坑，外面的空气呛得我的壳发痒。我站在呼啸悬崖上，风很大，吹得我眼眶发干。我第一次看见天空——不是深渊顶上那种黑色，是灰蒙蒙的、像被人洗了太多次的旧床单的颜色。\n\n我走了很远的路，又绕回来。\n\n回到那个叫圣巢的地方。到处是橙色的脓，粘在墙上，粘在天花板上，粘在那些已经不会动的虫的眼睛里。我低头看见自己的影子——它和别的影子不一样，它更黑，更沉，像一滩没有干透的墨。我伸手摸了摸地面，指尖沾了一点那种橙色的东西，粘稠的，温热的，像快要凝固的蜜。\n\n我开始往下走。\n\n遇见了一只和我长得很像的虫，比我大一圈，被锁链吊在黑卵里。它的壳裂了，橙色的东西从缝隙里往外渗。我用钉敲开它的壳，那里头是空的——只剩下一个像心脏一样跳动的光团，烫得我手发抖。\n\n原来我们是同一个模具压出来的。它是第一个，选了最漂亮的那个。我是剩下的那一堆里最不起眼的一个，被扔进深渊，等着自己死掉。可我没有死，我爬出来了，又走了回来，走得腿都在发抖。\n\n那只大虫被感染之后，我会走路，会挥钉，会爬墙，会二段跳。可我学不会一件事——笑。我的脸上只有眼窝，那是两块凹陷的黑色区域，不需要眼球填充。我低头看水面的时候，总觉得自己像一颗没有种子的枣核。\n\n我跟自己说：你只是一个容器，装东西的，别想太多。\n\n后来我在圣巢的各个角落看到了无数和我一样的壳——有的趴在崖底，有的嵌在墙上，有的倒在王座下面。我们长得一模一样，一样的眼睛，一样的手，一样的拎着骨钉。这世界上有无数个我，散落在各个阴暗的角落，像碎了一地的白瓷片，拼不回一个完整的盘子。\n\n“父亲？”\n\n它居然在问。在那个被封住的壳里，在被橙色的脓包裹的黑暗中，它在问那个抛弃它的人，问那个人在哪。\n\n我忽然觉得骨头里的虚空在翻涌。像有什么东西在身体内部敲墙，一下，又一下，敲得薄薄的外壳发出细碎的裂纹声。\n\n我的同胞们也在黑夜里等着我。它们没有身体，只有一团黑影，从深渊的最底层涌出来，把我举过头顶，像举一个失散多年的兄弟。我站在它们中间，感觉自己终于完整了一点点——像是从一面碎掉的镜子里，捡回了属于我的那块碎片。\n\n那个橙色的光团被我吞下去了。\n\n很烫，像咽了一口烧红的铁。\n\n我的壳开始裂，裂得比之前那只更大。橙色的光从缝隙里溢出来，照得周围的墙壁发亮。我想起深渊底部那些同胞——它们没有脸，没有名字，没有骨钉，只有一团永远无法合拢的黑色。它们看着我，一言不发，像在看一面镜子。\n\n原来我们从来不是什么容器。\n\n我们是被装错的信，被寄往一个查无此人的地址，然后在漫长的退件途中学会了走路。"},{"author":"小白","title":"落叶游戏","content":"我的小时候，我常常一个人和落叶做游戏。我会根据落下的区域，把落叶分派成不同的国家，然后相互攻伐。我既是他们战争与外交的执行者，也是规则的制定者。在玩这种游戏的时候，好像可以把那时还知之甚少的一些历史、军事联系起来。落叶与落叶之间的战争，领土的变迁，好像是我自己创造的一种编年史，或者文明史之类的。我一个人和那些落叶玩得不亦乐乎，它们是我专属的秘密。"}]},{"day":9,"themeGiver":"子原","theme":"很短的冷笑话","writings":[{"author":"橙子","title":"面试","content":"程序员去面试，面试官问：“你有什么缺点？”\n程序员说：“我比较固执。”\n面试官说：“能举个例子吗？”\n程序员说：“不能。”"},{"author":"子原","title":"装修","content":"一个程序员把自己用的装修推荐给了朋友，一年后朋友把家里的装修拆了，程序员回到家发现自己家也成毛坯房了。"},{"author":"HBC","title":"五线谱","content":"“五线谱里面的那个像s似的东西怎么弹？”\n“我问你5线谱里面的那个s似的东西怎么弹？”\n“你快回答我5线谱里面的那个s似这东西怎么弹啊？怎么不动呀”"},{"author":"科学怪熊","title":"比亚迪·蒙","content":"在高速路上，我们看到一台绿色小车，非常可爱。好像是台比亚迪。\n“这是啥车？”\n“比亚迪·蒙。”"},{"author":"小白","title":"卤蛋","content":"从前有个蛋，它在小岛动物农场玩，一个不小心从斜坡上滚下来，咕噜噜咕噜噜，它掉进了麓湖里，手忙脚乱跑出来一看，您猜怎么着，它变成了一颗卤蛋。"}]},{"day":10,"themeGiver":"","theme":"我想去火星","writings":[{"author":"科学怪熊","title":"火星演讲","content":"尊敬的秘书长，尊敬的女士们，先生们，\n\n非常荣幸有机会来到这里，这个历史并不长但意义深远的地方。三百年前，一批来自欧洲的清教徒，乘坐五月花号帆船，来到这个地方。尽管这片土地早已有原住民居住并建立了独特而珍贵的文明，对于这些远道而来的移民而言，这里依然是一片前所未有的自由之地——他们终于可以摆脱宗教迫害、封建压迫，在这里真正追求一种理想生活。\n\n接下来的一百年，伏尔泰、孟德斯鸠在欧洲著述论说，期望人类社会能从旧制度的铁屋子中钻出一道缝。这个梦想在法国被实现了吗？他们做到了，但付出了残酷的革命、内战、国家动荡半个世纪的代价。然而，华盛顿、杰弗逊们——美国的第一代国父，早在法国大革命前，就在北美十三州完成了这个蓝图。\n\n为什么，这个蓝图在新大陆上，比在她的发源地完成得更早、更成功？不可否认的一个重要原因是，新大陆上没有欧洲的历史遗留问题和相互耦合的复杂问题，理想主义者、思考者、发明家、创造者，都可以在这里自由地发挥他们的才能。\n\n要给电脑安装新系统，彻底消除顽疾，最快的方式是把硬盘格式化；最好的方式是重新买一台电脑。\n\n朋友们，我们现在面临一个重大的历史岔路口。在地球的环境破坏已经积重难返，人类的改革被几千年的恣意生长缠绕和黏着变得步履维艰，我们能否抛弃这一大堆bug丛生、牵一发而动全身的屎山代码？\n\n一个非常直接的答案——找到一片未曾被人类污染的新大陆。\n\n这篇新大陆的名字，就是火星。"},{"author":"橙子","title":"我想去火星","content":"地球太吵了。安静的吵——花苞绽开时有声响，蚂蚁搬运面包屑时有脚步声，就连隔壁房间的灯管老化，发出的嗡嗡声都能穿透三堵墙，钻进我的耳蜗，在那里筑巢。\n\n我想去火星。\n\n那里的风是哑巴。沙砾滚动没有摩擦音，石头开裂不会尖叫。整个星球只有一种声音——自己血液流动时那种沉闷的、低频率的震动，像心脏在敲一扇永远没人来开的门。我可以坐在奥林匹斯山的边缘，把腿悬空，让靴底离红色地面几厘米。风沙会慢慢剥掉我的外套颜色，剥掉我的指纹，剥掉我最后一点想说话的欲望。\n\n我带了一把勺子，一管快用完的防晒霜，和半块已经受潮的压缩饼干。到了火星，我把饼干掰成两半。一半埋在沙里，等它长出什么——它不会长。火星什么也不长。没有细菌，没有霉菌，连腐败都懒得发生。另一半我含在嘴里，不嚼，等唾液慢慢把它泡成泥浆，再咽下去。\n\n在那里，没有一朵花需要我浇水，没有一扇门需要我关上。我可以荒废成一具还算完整的壳，直到哪一天风吹过来，发现我已经站成了一根盐柱。"}]}];
+
+function esc(s){ if(!s)return "";var d=document.createElement("div");d.textContent=s;return d.innerHTML; }
+function escAttr(s){ return s.replace(/'/g,"\\'").replace(/"/g,"&quot;"); }
+function authorIcon(n){
+  var m={"橙子":"🍊","小岛":"🏝️","HBC":"✒️","Bright":"✨","科学怪熊":"🐻","子原":"🌿","小白":"🤍","桃子":"🍑"};
+  return m[n]||"🖊️";
+}
+
+// ===== 后端 API 配置 =====
+var API_BASE = window.location.origin + '/api';
+var userWritingsCache = [];
+
+function loadUser(){ return userWritingsCache; }
+
+async function refreshUserWritings(){
+  try{ var r=await fetch(API_BASE+'/writings'); userWritingsCache=await r.json(); }catch(e){ userWritingsCache=[]; }
+}
+
+async function saveWritingApi(w){
+  var r=await fetch(API_BASE+'/writings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(w)});
+  if(!r.ok){ var e=await r.json().catch(function(){return{};}); throw new Error(e.error||'保存失败'); }
+  var d=await r.json(); return d.writing;
+}
+
+async function deleteWritingApi(id){
+  await fetch(API_BASE+'/writings/'+encodeURIComponent(id),{method:'DELETE'});
+}
+
+function getMergedDays(){
+  var uw=loadUser(), days=JSON.parse(JSON.stringify(DATA_DAYS));
+  uw.forEach(function(w){
+    var day=days.find(function(d){return d.day===w.day;});
+    if(day){
+      var ei=day.writings.findIndex(function(x){return x._userId===w.id;});
+      if(ei>=0) day.writings[ei]={author:w.author,title:w.title,content:w.content,_userId:w.id};
+      else day.writings.push({author:w.author,title:w.title,content:w.content,_userId:w.id});
+    }else{
+      days.push({day:w.day,themeGiver:w.author,theme:w.theme||"自由写作",writings:[{author:w.author,title:w.title,content:w.content,_userId:w.id}]});
+    }
+  });
+  days.sort(function(a,b){return a.day-b.day;});
+  return days;
+}
+
+function getMergedAuthorMap(){
+  var days=getMergedDays(), map={};
+  days.forEach(function(d){ d.writings.forEach(function(w){
+    if(!map[w.author])map[w.author]=[];
+    map[w.author].push({day:d.day,theme:d.theme,themeGiver:d.themeGiver,title:w.title,content:w.content,_userId:w._userId});
+  });});
+  return map;
+}
+
+function getAllAuthorNames(){
+  return Object.keys(getMergedAuthorMap()).sort();
+}
+
+var main=document.getElementById("main");
+var navBtns=document.querySelectorAll(".nav-btn");
+var toastContainer=document.getElementById("toast-container");
+var currentView="home";
+var navState={};
+var writeUnlocked=false;
+
+// ===== Toast 悬浮通知 =====
+function showToast(msg, type){
+  type=type||'info';
+  var el=document.createElement('div');
+  el.className='toast-item toast-'+type;
+  el.textContent=msg;
+  toastContainer.appendChild(el);
+  setTimeout(function(){
+    if(el.parentNode) el.parentNode.removeChild(el);
+  },2500);
+}
+
+// ===== 自定义确认弹窗（替代 confirm） =====
+function showConfirm(msg){
+  return new Promise(function(resolve){
+    var overlay=document.createElement('div');
+    overlay.className='confirm-overlay';
+    overlay.innerHTML='<div class="confirm-dialog">'
+      +'<div class="confirm-msg">'+esc(msg)+'</div>'
+      +'<div class="confirm-btns">'
+      +'<button class="btn btn-outline cancel-btn">取消</button>'
+      +'<button class="btn btn-primary confirm-btn">确认</button>'
+      +'</div></div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('.cancel-btn').addEventListener('click',function(){
+      document.body.removeChild(overlay);resolve(false);
+    });
+    overlay.querySelector('.confirm-btn').addEventListener('click',function(){
+      document.body.removeChild(overlay);resolve(true);
+    });
+    overlay.addEventListener('click',function(e){
+      if(e.target===overlay){document.body.removeChild(overlay);resolve(false);}
+    });
+  });
+}
+
+// ===== 密码保护 =====
+var WRITE_PASSWORD='0407';
+
+function showPasswordGate(){
+  var overlay=document.createElement('div');
+  overlay.className='pwd-overlay';
+  overlay.id='pwd-overlay';
+  overlay.innerHTML='<div class="pwd-dialog" id="pwd-dialog">'
+    +'<div class="pwd-icon">🔐</div>'
+    +'<div class="pwd-title">请输入密码</div>'
+    +'<div class="pwd-hint">💡 提示：营期开始的时候</div>'
+    +'<input class="pwd-input" id="pwd-input" type="password" placeholder="输入密码" autofocus>'
+    +'<div class="pwd-btns">'
+    +'<button class="btn btn-outline" id="pwd-cancel">取消</button>'
+    +'<button class="btn btn-primary" id="pwd-submit">确认</button>'
+    +'</div></div>';
+  document.body.appendChild(overlay);
+
+  var input=overlay.querySelector('#pwd-input');
+  var dialog=overlay.querySelector('#pwd-dialog');
+
+  function tryUnlock(){
+    if(input.value===WRITE_PASSWORD){
+      writeUnlocked=true;
+      document.body.removeChild(overlay);
+      showToast('密码正确，开始码字吧 ✍️','success');
+      render();
+    }else{
+      dialog.classList.add('pwd-shake');
+      input.value='';
+      showToast('密码错误，请重试','error');
+      setTimeout(function(){dialog.classList.remove('pwd-shake');},500);
+      input.focus();
+    }
+  }
+
+  overlay.querySelector('#pwd-submit').addEventListener('click',tryUnlock);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});
+  overlay.querySelector('#pwd-cancel').addEventListener('click',function(){
+    document.body.removeChild(overlay);
+    // 切回首页
+    navBtns.forEach(function(b){b.classList.remove('active');});
+    document.querySelector('[data-view="home"]').classList.add('active');
+    currentView='home';
+    navState={};
+    render();
+  });
+  overlay.addEventListener('click',function(e){
+    if(e.target===overlay){
+      document.body.removeChild(overlay);
+      navBtns.forEach(function(b){b.classList.remove('active');});
+      document.querySelector('[data-view="home"]').classList.add('active');
+      currentView='home';
+      navState={};
+      render();
+    }
+  });
+  setTimeout(function(){input.focus();},350);
+}
+
+navBtns.forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var view=btn.dataset.view;
+    // 码字需要密码
+    if(view==='write' && !writeUnlocked){
+      showPasswordGate();
+      return;
+    }
+    navBtns.forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    currentView=view;
+    navState={};
+    render();
+  });
+});
+
+function render(){
+  if(currentView==="home") renderHome();
+  else if(currentView==="authors") renderAuthors();
+  else if(currentView==="write") renderWrite();
+}
+
+// ===== HOME =====
+function renderHome(){
+  var days=getMergedDays();
+  var totalWritings=days.reduce(function(s,d){return s+d.writings.length;},0);
+  var authorMap=getMergedAuthorMap();
+  var latest=days[days.length-1];
+  var h="";
+
+  if(latest){
+    h+='<div class="today-highlight" onclick="showDayDetail('+latest.day+')">';
+    h+='<span class="today-badge">最新 Day '+latest.day+'</span>';
+    h+='<div class="today-theme">'+esc(latest.theme)+'</div>';
+    h+='<div style="font-size:0.82rem;color:var(--text-muted);margin-top:4px">';
+    if(latest.themeGiver) h+='出题人：'+esc(latest.themeGiver)+' · ';
+    h+=latest.writings.length+' 篇文字</div>';
+    h+='<div class="today-hint">点击查看不同作者的文字 →</div>';
+    h+='</div>';
+  }
+
+  h+='<div class="stats-bar">';
+  h+='<div class="stat-item"><span class="stat-num">'+days.length+'</span><span class="stat-label">天主题</span></div>';
+  h+='<div class="stat-item"><span class="stat-num">'+totalWritings+'</span><span class="stat-label">篇文字</span></div>';
+  h+='<div class="stat-item"><span class="stat-num">'+Object.keys(authorMap).length+'</span><span class="stat-label">位作者</span></div>';
+  h+='</div>';
+
+  h+='<div class="section-title">每日主题目录</div>';
+  h+='<div class="toc-grid">';
+  var reversed=days.slice().reverse();
+  reversed.forEach(function(d){
+    var authors=d.writings.map(function(w){return w.author;});
+    var ua=[]; authors.forEach(function(a){if(ua.indexOf(a)<0)ua.push(a);});
+    h+='<div class="toc-item" onclick="showDayDetail('+d.day+')">';
+    h+='<div class="toc-num">'+d.day+'</div>';
+    h+='<div class="toc-info">';
+    h+='<div class="toc-theme">'+esc(d.theme)+'</div>';
+    h+='<div class="toc-meta">';
+    if(d.themeGiver) h+='出题：'+esc(d.themeGiver)+' · ';
+    h+=d.writings.length+' 篇 · '+ua.join('、');
+    h+='</div></div>';
+    h+='<div class="toc-arrow">→</div>';
+    h+='</div>';
+  });
+  h+='</div>';
+  main.innerHTML=h;
+}
+
+window.showDayDetail=function(dayNum){
+  var days=getMergedDays();
+  var d=days.find(function(dd){return dd.day===dayNum;});
+  if(!d) return;
+
+  var h="";
+  h+='<button class="back-btn" onclick="renderHome()">← 返回目录</button>';
+  h+='<div class="breadcrumb">每日主题 <span style="color:var(--text-muted);cursor:default;text-decoration:none">›</span> Day '+d.day+'</div>';
+  h+='<div class="detail-header">';
+  h+='<span class="today-badge">Day '+d.day+'</span>';
+  h+='<div class="today-theme" style="margin-top:8px">'+esc(d.theme)+'</div>';
+  h+='<div style="font-size:0.82rem;color:var(--text-muted);margin-top:4px">';
+  if(d.themeGiver) h+='出题人：'+esc(d.themeGiver)+' · ';
+  h+=d.writings.length+' 篇文字</div>';
+  h+='</div>';
+
+  h+='<div class="section-title">本主题文字</div>';
+  d.writings.forEach(function(w){
+    h+='<div class="writing-card">';
+    h+='<div class="writing-author-line">'+authorIcon(w.author)+' '+esc(w.author)+'</div>';
+    if(w.title&&w.title!=="无题") h+='<span class="writing-title-line">—— '+esc(w.title)+'</span>';
+    if(w._userId) h+='<span style="font-size:0.7rem;color:var(--text-muted);margin-left:6px">（用户投稿）</span>';
+    h+='<div class="writing-body">'+esc(w.content)+'</div>';
+    h+='</div>';
+  });
+
+  main.innerHTML=h;
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+// ===== AUTHORS =====
+function renderAuthors(){
+  if(navState.authorName && navState.authorThemeDay){
+    renderAuthorThemeDetail();
+    return;
+  }
+  if(navState.authorName){
+    renderAuthorThemeList();
+    return;
+  }
+
+  var authorMap=getMergedAuthorMap();
+  var authorStats=Object.keys(authorMap).map(function(name){
+    var ws=authorMap[name];
+    var daySet={}; ws.forEach(function(w){daySet[w.day]=true;});
+    return {name:name,count:ws.length,days:Object.keys(daySet).map(Number)};
+  }).sort(function(a,b){return b.count-a.count;});
+
+  var h='<div class="section-title">作者花园</div>';
+  h+='<div class="author-grid">';
+  authorStats.forEach(function(a){
+    h+='<div class="author-card" onclick="viewAuthor(\''+escAttr(a.name)+'\')">';
+    h+='<div class="author-avatar">'+a.name[0]+'</div>';
+    h+='<div class="author-name">'+esc(a.name)+'</div>';
+    h+='<div class="author-stats">'+a.count+' 篇文字 · '+a.days.length+' 个主题</div>';
+    h+='<div class="author-themes">';
+    a.days.sort(function(x,y){return x-y;}).slice(0,6).forEach(function(d){
+      h+='<span class="author-theme-tag">Day'+d+'</span>';
+    });
+    if(a.days.length>6) h+='<span class="author-theme-tag">+'+(a.days.length-6)+'</span>';
+    h+='</div></div>';
+  });
+  h+='</div>';
+  main.innerHTML=h;
+}
+
+window.viewAuthor=function(name){
+  navState.authorName=name;
+  navState.authorThemeDay=null;
+  renderAuthors();
+};
+
+function renderAuthorThemeList(){
+  var authorMap=getMergedAuthorMap();
+  var writings=authorMap[navState.authorName]||[];
+  var byDay={};
+  writings.forEach(function(w){
+    if(!byDay[w.day]) byDay[w.day] = {day:w.day, theme:w.theme, themeGiver:w.themeGiver, count:0};
+    byDay[w.day].count++;
+  });
+  var dayList=Object.values(byDay).sort(function(a,b){return a.day-b.day;});
+
+  var h="";
+  h+='<button class="back-btn" onclick="navState={};renderAuthors();">← 返回作者花园</button>';
+  h+='<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">';
+  h+='<div class="author-avatar" style="width:56px;height:56px;font-size:1.5rem">'+navState.authorName[0]+'</div>';
+  h+='<div>';
+  h+='<div style="font-family:var(--font-serif);font-size:1.4rem;font-weight:700">'+esc(navState.authorName)+'</div>';
+  h+='<div style="font-size:0.82rem;color:var(--text-muted)">'+writings.length+' 篇文字 · '+dayList.length+' 个主题</div>';
+  h+='</div></div>';
+
+  h+='<div class="section-title">写过的主题</div>';
+  h+='<div class="theme-list">';
+  dayList.forEach(function(d){
+    h+='<div class="theme-list-item" onclick="viewAuthorTheme('+d.day+')">';
+    h+='<span class="theme-list-day">Day '+d.day+'</span>';
+    h+='<span class="theme-list-theme">'+esc(d.theme)+'</span>';
+    h+='<span style="font-size:0.78rem;color:var(--text-muted);margin-right:8px">'+d.count+'篇</span>';
+    h+='<span class="theme-list-arrow">→</span>';
+    h+='</div>';
+  });
+  h+='</div>';
+  main.innerHTML=h;
+}
+
+window.viewAuthorTheme=function(dayNum){
+  navState.authorThemeDay=dayNum;
+  renderAuthors();
+};
+
+function renderAuthorThemeDetail(){
+  var authorMap=getMergedAuthorMap();
+  var writings=authorMap[navState.authorName]||[];
+  var dayNum=navState.authorThemeDay;
+  var matching=writings.filter(function(w){return w.day===dayNum;});
+  var dayInfo=matching[0];
+
+  var h="";
+  h+='<button class="back-btn" onclick="navState.authorThemeDay=null;renderAuthors();">← 返回'+esc(navState.authorName)+'的主题列表</button>';
+  h+='<div class="breadcrumb">作者花园 <span style="color:var(--text-muted);cursor:default;text-decoration:none">›</span> '+esc(navState.authorName)+' <span style="color:var(--text-muted);cursor:default;text-decoration:none">›</span> Day '+dayNum+'</div>';
+  h+='<div class="detail-header">';
+  h+='<span class="today-badge">Day '+dayNum+'</span>';
+  h+='<div class="today-theme" style="margin-top:8px">'+esc(dayInfo.theme)+'</div>';
+  if(dayInfo.themeGiver) h+='<div style="font-size:0.82rem;color:var(--text-muted);margin-top:4px">出题人：'+esc(dayInfo.themeGiver)+'</div>';
+  h+='</div>';
+
+  matching.forEach(function(w){
+    h+='<div class="writing-card">';
+    h+='<div class="writing-author-line">'+authorIcon(w.author)+' '+esc(w.author)+'</div>';
+    if(w.title&&w.title!=="无题") h+='<span class="writing-title-line">—— '+esc(w.title)+'</span>';
+    h+='<div class="writing-body">'+esc(w.content)+'</div>';
+    h+='</div>';
+  });
+
+  main.innerHTML=h;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// ===== WRITE =====
+var editingId=null;
+
+function renderWrite(){
+  var days=getMergedDays();
+  var userWritings=loadUser();
+  var allAuthors=getAllAuthorNames();
+
+  var h='<div class="write-panel">';
+  h+='<div class="section-title" style="margin-bottom:20px">码字</div>';
+
+  h+='<div class="form-group"><label class="form-label">笔名</label>';
+  h+='<select class="form-select" id="write-author" onchange="onAuthorChange()">';
+  h+='<option value="">-- 选择已有作者或新建 --</option>';
+  allAuthors.forEach(function(a){
+    h+='<option value="'+escAttr(a)+'">'+authorIcon(a)+' '+esc(a)+'</option>';
+  });
+  h+='<option value="__new__">＋ 新增作者</option>';
+  h+='</select>';
+  h+='<input class="form-input" id="write-new-author" placeholder="输入新笔名" style="display:none;margin-top:8px">';
+  h+='</div>';
+
+  h+='<div class="form-group"><label class="form-label">选择主题日</label>';
+  h+='<select class="form-select" id="write-day" onchange="onDayChange()">';
+  h+='<option value="">-- 选择已有主题日 --</option>';
+  var reversed=days.slice().reverse();
+  reversed.forEach(function(d){
+    h+='<option value="'+d.day+'">Day '+d.day+'：'+esc(d.theme.substring(0,40))+'</option>';
+  });
+  h+='<option value="__new__">＋ 新建主题日</option>';
+  h+='</select>';
+
+  h+='<div class="new-day-box" id="new-day-group" style="display:none">';
+  h+='<label class="form-label">新主题日编号（天数）</label>';
+  h+='<input class="form-input" id="write-new-day" type="number" min="1" value="'+(days.length+1)+'" placeholder="例如：'+(days.length+1)+'">';
+  h+='<label class="form-label" style="margin-top:10px">今日主题名</label>';
+  h+='<input class="form-input" id="write-new-theme" placeholder="输入这个新主题的描述">';
+  h+='</div>';
+  h+='</div>';
+
+  h+='<div class="form-group"><label class="form-label">文字标题（可选）</label>';
+  h+='<input class="form-input" id="write-title" placeholder="给你的文字起个名字"></div>';
+
+  h+='<div class="form-group"><label class="form-label">正文</label>';
+  h+='<textarea class="form-textarea" id="write-content" placeholder="在这里写下你的文字..."></textarea></div>';
+
+  h+='<div class="btn-row">';
+  h+='<button class="btn btn-primary" onclick="submitWriting()">发布文字</button>';
+  h+='<button class="btn btn-outline" onclick="clearWriteForm()">清空</button>';
+  h+='</div>';
+
+  h+='<div class="user-writings">';
+  h+='<div class="section-title" style="margin-bottom:14px">投稿记录</div>';
+  if(userWritings.length===0){
+    h+='<div class="empty-state">还没有投稿，快来写下第一篇文字吧</div>';
+  }else{
+    var byAuthor={};
+    userWritings.forEach(function(w){
+      if(!byAuthor[w.author])byAuthor[w.author]=[];
+      byAuthor[w.author].push(w);
+    });
+    Object.keys(byAuthor).forEach(function(author){
+      h+='<div style="font-weight:600;color:var(--accent);margin-top:12px;margin-bottom:6px">'+authorIcon(author)+' '+esc(author)+'</div>';
+      var rev=byAuthor[author].slice().reverse();
+      rev.forEach(function(w){
+        h+='<div class="user-writing-item">';
+        h+='<div class="user-writing-info">';
+        h+='<div class="user-writing-meta">Day '+w.day+' · '+(w.title||'无题')+' · '+new Date(w.createdAt).toLocaleDateString('zh-CN')+'</div>';
+        h+='<div class="user-writing-preview">'+esc(w.content.substring(0,80))+'...</div>';
+        h+='</div>';
+        h+='<div style="display:flex;gap:6px;flex-shrink:0">';
+        h+='<button class="btn btn-outline" style="padding:4px 10px;font-size:0.75rem" onclick="editWriting(\''+w.id+'\')">编辑</button>';
+        h+='<button class="btn btn-danger" onclick="deleteWriting(\''+w.id+'\')">删除</button>';
+        h+='</div></div>';
+      });
+    });
+  }
+  h+='</div></div>';
+  main.innerHTML=h;
+
+  var lastAuthor=localStorage.getItem("write_last_author");
+  if(lastAuthor) document.getElementById("write-author").value=lastAuthor;
+}
+
+window.onAuthorChange=function(){
+  var val=document.getElementById("write-author").value;
+  document.getElementById("write-new-author").style.display=val==="__new__"?"block":"none";
+};
+
+window.onDayChange=function(){
+  var val=document.getElementById("write-day").value;
+  document.getElementById("new-day-group").style.display=val==="__new__"?"block":"none";
+};
+
+window.submitWriting=async function(){
+  var authorSel=document.getElementById("write-author").value;
+  var author=authorSel==="__new__"?document.getElementById("write-new-author").value.trim():authorSel;
+  var daySel=document.getElementById("write-day").value;
+  var title=document.getElementById("write-title").value.trim();
+  var content=document.getElementById("write-content").value.trim();
+
+  if(!author){showToast("请选择或输入笔名");return;}
+  if(!content){showToast("请输入正文");return;}
+
+  var day,theme;
+  if(daySel==="__new__"){
+    day=parseInt(document.getElementById("write-new-day").value);
+    theme=document.getElementById("write-new-theme").value.trim();
+    if(!day||!theme){showToast("请填写新主题日的编号和主题名");return;}
+  }else{
+    if(!daySel){showToast("请选择主题日或新建主题日");return;}
+    day=parseInt(daySel);
+    var merged=getMergedDays();
+    var d=merged.find(function(dd){return dd.day===day;});
+    theme=d?d.theme:'';
+  }
+
+  var now=Date.now();
+  var writing={
+    author:author, day:day, theme:theme, title:title, content:content,
+    createdAt:now, updatedAt:now
+  };
+  if(editingId){ writing.id=editingId; }else{ writing.id='uw_'+now; }
+
+  try{
+    var wasEdit=!!editingId;
+    await saveWritingApi(writing);
+    await refreshUserWritings();
+    editingId=null;
+    showToast(wasEdit?'文字已更新！':'文字已发布！','success');
+    localStorage.setItem("write_last_author",author);
+    clearWriteForm();
+    render();
+  }catch(e){
+    showToast('保存失败，请确认后端已启动','error');
+  }
+};
+
+window.editWriting=function(id){
+  var writings=loadUser();
+  var w=writings.find(function(ww){return ww.id===id;});
+  if(!w)return;
+  editingId=id;
+  document.getElementById("write-author").value=w.author;
+  document.getElementById("write-title").value=w.title||"";
+  document.getElementById("write-content").value=w.content;
+  var daySelect=document.getElementById("write-day");
+  var merged=getMergedDays();
+  var found=merged.find(function(d){return d.day===w.day;});
+  if(found&&DATA_DAYS.find(function(d){return d.day===w.day;})){
+    daySelect.value=w.day;document.getElementById("new-day-group").style.display="none";
+  }else{
+    daySelect.value="__new__";document.getElementById("new-day-group").style.display="block";
+    document.getElementById("write-new-day").value=w.day;
+    document.getElementById("write-new-theme").value=w.theme||"";
+  }
+  document.getElementById("write-content").focus();
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+window.deleteWriting=async function(id){
+  var ok=await showConfirm('确定删除这篇文字吗？此操作不可撤销。');
+  if(!ok)return;
+  try{
+    await deleteWritingApi(id);
+    await refreshUserWritings();
+    showToast('文字已删除','success');render();
+  }catch(e){ showToast('删除失败，请确认后端已启动','error'); }
+};
+
+window.clearWriteForm=function(){
+  document.getElementById("write-author").value="";
+  document.getElementById("write-new-author").value="";
+  document.getElementById("write-new-author").style.display="none";
+  document.getElementById("write-title").value="";
+  document.getElementById("write-content").value="";
+  document.getElementById("write-day").value="";
+  document.getElementById("new-day-group").style.display="none";
+  document.getElementById("write-new-theme").value="";
+  editingId=null;
+};
+
+(async function init(){
+  await refreshUserWritings();
+  render();
+})();
+</script>
+</body>
+</html>

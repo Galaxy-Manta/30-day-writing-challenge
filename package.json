@@ -1,0 +1,17 @@
+{
+  "name": "writing-challenge-server",
+  "version": "1.0.0",
+  "description": "30天写作挑战 - 后端服务",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:tunnel": "node server.js --tunnel",
+    "start:public": "node server.js --tunnel --subdomain writing30",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "localtunnel": "^2.0.2",
+    "sql.js": "^1.11.0"
+  }
+}
